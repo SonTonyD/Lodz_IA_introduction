@@ -101,3 +101,7 @@ if __name__ == '__main__':
     frame = MyFrame()
     app.MainLoop()
     
+    '''
+    random.choice
+    '''
+    

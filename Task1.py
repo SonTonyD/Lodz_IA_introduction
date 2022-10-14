@@ -1,4 +1,5 @@
 import math
+from re import X
 import matplotlib.pyplot as plt
 import numpy as np
 import random as rdm
@@ -42,6 +43,8 @@ plt.plot(xpoints2, ypoints2, 'v')
 plt.plot(xpoints3, ypoints3, 'x')
 plt.show()
 '''
+
+'''
 def define_class(posX, posY, radius, nbPoints, marker):
     xpoints = np.array([])
     ypoints = np.array([])
@@ -62,3 +65,23 @@ plt.xlim(-2, 15)
 plt.ylim(-2, 15)
 
 plt.show()
+
+'''
+
+
+
+'''
+minMean
+maxMean
+minVar
+maxVar
+SamplePerMode
+ModePerClass
+'''
+
+def generatePoints(minMean, maxMean, minVar, maxVar, SamplePerMode, ModePerClass):
+    pass
+
+
+
+    
