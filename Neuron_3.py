@@ -1,12 +1,13 @@
 import math
 class Neuron:
-    def __init__(self, lr, actFunc):
+    def __init__(self, lr, actFunc, betaValue):
         self.weight = [0,0,0]
         self.lr = lr
         self.actFunc = actFunc
         self.inputs = [-1,0, 0] #default value
         self.target = 0 #default value
         self.sum = 0
+        self.betaValue = betaValue
 
     def setInput(self, x, y):
         self.inputs = [-1,x, y]
@@ -22,7 +23,7 @@ class Neuron:
             else:
                 return 0.0
         if self.actFunc == "logistic":
-            beta = 1
+            beta = self.betaValue
             if -beta*sum > 450:
                 return 1/(1+math.exp(450))
             return 1/(1+math.exp(-beta*sum))
@@ -39,7 +40,7 @@ class Neuron:
         if self.actFunc == "heaviside":
             return 1.0
         if self.actFunc == "logistic":
-            beta = 1.0
+            beta = self.betaValue
             if -beta*sum > 300:
                 phi = 1/(1+math.exp(300))
             else:
@@ -54,7 +55,7 @@ class Neuron:
             else:
                 return 0.0
 
-    #Return the output and the sum
+    #Return the output y
     def prediction(self):
         self.sum = 0
         for i in range(len(self.weight)):

@@ -6,16 +6,29 @@ from PyQt5.QtWidgets import *
 from Neuron_3 import Neuron
 import matplotlib.pyplot as plt
 from matplotlib import colors
+from PyQt5.QtCore import *
+
 
 class DemoWidget(QtWidgets.QWidget):
     def __init__(self):
         super(DemoWidget, self).__init__()
         uic.loadUi('gui_plot.ui', self)
+        self.label_betaValue.setHidden(True)
+        self.lineEdit_betaValue.setHidden(True)
         
         self.pushButton.clicked.connect(self.click)
         self.defaultValueButton.clicked.connect(self.setDefaultValue)
+        self.comboBoxActFunc.currentIndexChanged.connect(self.selectionChange)
 
         self.show()
+
+    def selectionChange(self):
+        if self.comboBoxActFunc.currentText() == "logistic":
+            self.label_betaValue.setHidden(False)
+            self.lineEdit_betaValue.setHidden(False)
+        else:
+            self.label_betaValue.setHidden(True)
+            self.lineEdit_betaValue.setHidden(True)
 
     def setDefaultValue(self):
         plt.close()
@@ -30,6 +43,8 @@ class DemoWidget(QtWidgets.QWidget):
 
         self.lineEdit_lr.setText("0.01")
         self.lineEdit_nbOfEpoch.setText("200")
+
+        self.lineEdit_betaValue.setText("1.0")
 
 
     def click(self):
@@ -46,25 +61,26 @@ class DemoWidget(QtWidgets.QWidget):
         lr = float(self.lineEdit_lr.text())
         nbOfEpoch = int(self.lineEdit_nbOfEpoch.text())
         actFunc = self.comboBoxActFunc.currentText()
+        betaValue = float(self.lineEdit_betaValue.text())
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc)
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue)
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc):
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
         arrayClass02X = np.array([])
         arrayClass02Y = np.array([])
 
-        (arrayClass01X, arrayClass01Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "red")
-        (arrayClass02X, arrayClass02Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "blue")
+        (arrayClass01X, arrayClass01Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "blue")
+        (arrayClass02X, arrayClass02Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "red")
 
         #Create input numpy.array and label each data
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
 
         #Feed the neuron
-        neuron = Neuron(lr, actFunc)
-        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc)
+        neuron = Neuron(lr, actFunc, betaValue)
+        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc, betaValue)
 
         #Draw Contour
         self.drawContour(neuron, meanMin, meanMax)
@@ -118,10 +134,9 @@ class DemoWidget(QtWidgets.QWidget):
         
         return inputData, target
 
-    def useNeuron(self, inputData, targetData, nbEpoch, lr, actFunc):
-        n = Neuron(lr, actFunc)
+    def useNeuron(self, inputData, targetData, nbEpoch, lr, actFunc, betaValue):
+        n = Neuron(lr, actFunc, betaValue)
 
-        print(n.weight)
 
         for i in range(nbEpoch):
             n.setInput(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1])
@@ -129,7 +144,6 @@ class DemoWidget(QtWidgets.QWidget):
             #print(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1], targetData[i%(inputData.shape[0])], n.prediction())
             n.train()
         
-        print(n.weight)
         
         return n.weight
 
@@ -137,7 +151,6 @@ class DemoWidget(QtWidgets.QWidget):
 
 
     def drawContour(self, neuron, meanMin, meanMax):
-        print(neuron.weight)
         x = np.arange(meanMin, meanMax, 0.1)
         y = np.arange(meanMin, meanMax, 0.1)
 
@@ -151,8 +164,7 @@ class DemoWidget(QtWidgets.QWidget):
         Z = Z.reshape((len(x), len(y)))
 
 
-        cmap = colors.ListedColormap(['r','b'])
-        cs = plt.contourf(X,Y,Z,cmap=cmap,alpha = 0.2)
+        cs = plt.contourf(X,Y,Z,cmap="jet",alpha = 0.2)
         cbar = plt.colorbar(cs)
 
 if __name__ == '__main__':
