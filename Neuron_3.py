@@ -34,6 +34,15 @@ class Neuron:
                 return -1.0
         if self.actFunc == "relu":
             return max(0,sum)
+        if self.actFunc == "sin":
+            return math.sin(sum)
+        if self.actFunc == "tanh":
+            return math.tanh(sum)
+        if self.actFunc == "leaky relu":
+            if sum > 0:
+                return sum
+            else :
+                return 0.01*sum
 
     
     def derivativeActFunc(self, sum):
@@ -54,6 +63,15 @@ class Neuron:
                 return 1.0
             else:
                 return 0.0
+        if self.actFunc == "sin":
+            return math.cos(sum)
+        if self.actFunc == "tanh":
+            return math.pow(1/(math.cosh(sum)),2)
+        if self.actFunc == "leaky relu":
+            if sum > 0:
+                return 1
+            else :
+                return 0.01
 
     #Return the output y
     def prediction(self):
@@ -71,11 +89,4 @@ class Neuron:
             self.weight[i] += error * self.inputs[i] * self.lr * self.derivativeActFunc(self.sum)
 
 
-    def testPrediction(self):
-        prediction = self.prediction()
-        self.target
-        if(prediction == self.target):
-            return "GOOD"
-        else:
-            return "BAD"
         

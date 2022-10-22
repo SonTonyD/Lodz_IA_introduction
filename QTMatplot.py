@@ -75,7 +75,7 @@ class DemoWidget(QtWidgets.QWidget):
         (arrayClass01X, arrayClass01Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "blue")
         (arrayClass02X, arrayClass02Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "red")
 
-        #Create input numpy.array and label each data
+        #Create inputData and target as numpy arrays
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
 
         #Feed the neuron
@@ -120,7 +120,7 @@ class DemoWidget(QtWidgets.QWidget):
         np.random.shuffle(allInput)
         #print(allInput)
 
-        #build target vector
+        #build target vector from AllInput vector
         target = np.array([])
         for i in range(allInput.shape[0]):
             target = np.append(target, allInput[i][2])
@@ -146,8 +146,6 @@ class DemoWidget(QtWidgets.QWidget):
         
         
         return n.weight
-
-
 
 
     def drawContour(self, neuron, meanMin, meanMax):
