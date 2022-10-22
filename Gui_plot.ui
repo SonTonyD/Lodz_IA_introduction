@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>468</height>
+    <width>301</width>
+    <height>683</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -160,14 +160,14 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>340</y>
+     <x>90</x>
+     <y>580</y>
      <width>111</width>
      <height>28</height>
     </rect>
    </property>
    <property name="text">
-    <string>Generate Points</string>
+    <string>Process</string>
    </property>
   </widget>
   <widget class="Line" name="line">
@@ -181,6 +181,174 @@
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="defaultValueButton">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>20</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Set Default Value</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>141</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Generate Points</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>340</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Neuron Hyperparameters</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_nbOfEpoch">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>400</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>380</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nb of Epoch</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_lr">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>400</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>380</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Learning Rate</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBoxActFunc">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>460</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="editable">
+    <bool>false</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>heaviside</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>logistic</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>sin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>tanh</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>sign</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>relu</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>leaky relu</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>440</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Activation Function</string>
    </property>
   </widget>
  </widget>

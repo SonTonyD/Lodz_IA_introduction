@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Neuron_3 import Neuron
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 class DemoWidget(QtWidgets.QWidget):
     def __init__(self):
@@ -12,9 +13,27 @@ class DemoWidget(QtWidgets.QWidget):
         uic.loadUi('gui_plot.ui', self)
         
         self.pushButton.clicked.connect(self.click)
+        self.defaultValueButton.clicked.connect(self.setDefaultValue)
+
         self.show()
 
+    def setDefaultValue(self):
+        plt.close()
+        self.lineEdit_meanMin.setText("0")
+        self.lineEdit_meanMax.setText("10")
+        
+        self.lineEdit_varMin.setText("0.5")
+        self.lineEdit_varMax.setText("0.9")
+        
+        self.lineEdit_samplePerMode.setText("300")
+        self.lineEdit_modePerClass.setText("1")
+
+        self.lineEdit_lr.setText("0.01")
+        self.lineEdit_nbOfEpoch.setText("200")
+
+
     def click(self):
+        plt.close()
         meanMin = float(self.lineEdit_meanMin.text())
         meanMax = float(self.lineEdit_meanMax.text())
         
@@ -24,9 +43,13 @@ class DemoWidget(QtWidgets.QWidget):
         samplePerMode = int(self.lineEdit_samplePerMode.text())
         modePerClass = int(self.lineEdit_modePerClass.text())
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass)
+        lr = float(self.lineEdit_lr.text())
+        nbOfEpoch = int(self.lineEdit_nbOfEpoch.text())
+        actFunc = self.comboBoxActFunc.currentText()
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass):
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc)
+
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -40,9 +63,8 @@ class DemoWidget(QtWidgets.QWidget):
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
 
         #Feed the neuron
-        nbEpoch = 200
-        lr = 0.05
-        neuron = self.useNeuron(inputData, target, nbEpoch, lr)
+        neuron = Neuron(lr, actFunc)
+        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc)
 
         #Draw Contour
         self.drawContour(neuron, meanMin, meanMax)
@@ -92,31 +114,46 @@ class DemoWidget(QtWidgets.QWidget):
         inputData = np.array([allInput[0][0],allInput[0][1]])
         for i in range(1,allInput.shape[0]):
             inputData = np.vstack([inputData, [allInput[i][0], allInput[i][1]] ])
+        #print(inputData)
         
         return inputData, target
 
-    def useNeuron(self, inputData, targetData, nbEpoch, lr):
-        n = Neuron(lr)
+    def useNeuron(self, inputData, targetData, nbEpoch, lr, actFunc):
+        n = Neuron(lr, actFunc)
+
+        print(n.weight)
 
         for i in range(nbEpoch):
-            n.setInput(inputData[i][0], inputData[i][1])
-            n.setTarget(targetData[i])
+            n.setInput(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1])
+            n.setTarget(targetData[i%(inputData.shape[0])])
+            #print(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1], targetData[i%(inputData.shape[0])], n.prediction())
             n.train()
         
-        return n
+        print(n.weight)
+        
+        return n.weight
+
+
+
 
     def drawContour(self, neuron, meanMin, meanMax):
-        x = np.arange(meanMin, meanMax, 0.1)
-        y = np.arange(meanMin, meanMax, 0.1)
+        print(neuron.weight)
+        x = np.arange(meanMin, meanMax, 0.5)
+        y = np.arange(meanMin, meanMax, 0.5)
 
         Z = np.array([])
         X, Y = np.meshgrid(x,y)
         for i in x:
             for j in y:
-                neuron.setInput(i,j)
+                neuron.setInput(j,i)
                 Z = np.append(Z, neuron.prediction())
+                #print(i,j,neuron.prediction())
         Z = Z.reshape((len(x), len(y)))
-        plt.contourf(x,y,Z,cmap="bone",alpha = 0.5)
+
+
+        cmap = colors.ListedColormap(['r','b'])
+        cs = plt.contourf(X,Y,Z,cmap=cmap,alpha = 0.2)
+        cbar = plt.colorbar(cs)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
