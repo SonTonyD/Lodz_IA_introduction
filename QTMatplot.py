@@ -138,8 +138,8 @@ class DemoWidget(QtWidgets.QWidget):
 
     def drawContour(self, neuron, meanMin, meanMax):
         print(neuron.weight)
-        x = np.arange(meanMin, meanMax, 0.5)
-        y = np.arange(meanMin, meanMax, 0.5)
+        x = np.arange(meanMin, meanMax, 0.1)
+        y = np.arange(meanMin, meanMax, 0.1)
 
         Z = np.array([])
         X, Y = np.meshgrid(x,y)
