@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
-    <height>683</height>
+    <width>312</width>
+    <height>738</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,7 +161,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>580</y>
+     <y>620</y>
      <width>111</width>
      <height>28</height>
     </rect>
@@ -294,7 +294,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>450</y>
+     <y>540</y>
      <width>111</width>
      <height>22</height>
     </rect>
@@ -342,7 +342,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>430</y>
+     <y>520</y>
      <width>111</width>
      <height>16</height>
     </rect>
@@ -355,7 +355,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>450</y>
+     <y>540</y>
      <width>71</width>
      <height>22</height>
     </rect>
@@ -365,13 +365,78 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>430</y>
+     <y>520</y>
      <width>71</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Bêta Value</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_variableLr">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>440</y>
+     <width>161</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Variable Learning Rate</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_maxLr">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>480</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_maxLr">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>460</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Max lr</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_minLr">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>460</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Min lr</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_minLr">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>480</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
    </property>
   </widget>
  </widget>

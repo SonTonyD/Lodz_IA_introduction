@@ -1,3 +1,4 @@
+import math
 from PyQt5 import QtWidgets, uic
 import sys
 import numpy as np
@@ -19,8 +20,19 @@ class DemoWidget(QtWidgets.QWidget):
         self.pushButton.clicked.connect(self.click)
         self.defaultValueButton.clicked.connect(self.setDefaultValue)
         self.comboBoxActFunc.currentIndexChanged.connect(self.selectionChange)
+        self.checkBox_variableLr.stateChanged.connect(self.handleCheckBox)
 
         self.show()
+
+    def handleCheckBox(self):
+        if self.checkBox_variableLr.isChecked() == True:
+            self.lineEdit_minLr.setEnabled(True)
+            self.lineEdit_maxLr.setEnabled(True)
+            self.lineEdit_lr.setEnabled(False)
+        else:
+            self.lineEdit_minLr.setEnabled(False)
+            self.lineEdit_maxLr.setEnabled(False)
+            self.lineEdit_lr.setEnabled(True)
 
     def selectionChange(self):
         if self.comboBoxActFunc.currentText() == "logistic":
@@ -58,14 +70,21 @@ class DemoWidget(QtWidgets.QWidget):
         samplePerMode = int(self.lineEdit_samplePerMode.text())
         modePerClass = int(self.lineEdit_modePerClass.text())
 
-        lr = float(self.lineEdit_lr.text())
+        if self.checkBox_variableLr.isChecked() == True:
+            lr = float(self.lineEdit_minLr.text())
+            maxLr = float(self.lineEdit_maxLr.text())
+        else:
+            lr = float(self.lineEdit_lr.text())
+            maxLr = float(self.lineEdit_lr.text())
+
+
         nbOfEpoch = int(self.lineEdit_nbOfEpoch.text())
         actFunc = self.comboBoxActFunc.currentText()
         betaValue = float(self.lineEdit_betaValue.text())
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue)
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr)
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue):
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -80,7 +99,7 @@ class DemoWidget(QtWidgets.QWidget):
 
         #Feed the neuron
         neuron = Neuron(lr, actFunc, betaValue)
-        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc, betaValue)
+        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc, betaValue, maxLr)
 
         #Draw Contour
         self.drawContour(neuron, meanMin, meanMax)
@@ -134,11 +153,13 @@ class DemoWidget(QtWidgets.QWidget):
         
         return inputData, target
 
-    def useNeuron(self, inputData, targetData, nbEpoch, lr, actFunc, betaValue):
+    def useNeuron(self, inputData, targetData, nbEpoch, lr, actFunc, betaValue, maxLr):
         n = Neuron(lr, actFunc, betaValue)
 
+        
 
         for i in range(nbEpoch):
+            n.lr = lr + (maxLr-lr)*(1+(math.cos((i*math.pi)/nbEpoch)))
             n.setInput(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1])
             n.setTarget(targetData[i%(inputData.shape[0])])
             #print(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1], targetData[i%(inputData.shape[0])], n.prediction())
