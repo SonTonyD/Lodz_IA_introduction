@@ -1,7 +1,8 @@
 import math
+import numpy as np
 class Neuron:
     def __init__(self, lr, actFunc, betaValue):
-        self.weight = [0,0,0]
+        self.weight = np.zeros(3)
         self.lr = lr
         self.actFunc = actFunc
         self.inputs = [-1,0, 0] #default value
@@ -9,8 +10,13 @@ class Neuron:
         self.sum = 0
         self.betaValue = betaValue
 
-    def setInput(self, x, y):
-        self.inputs = [-1,x, y]
+    def initWeight(self, inputs):
+        self.weight = np.zeros(inputs.shape[0] + 1)
+        print(self.weight)
+
+    def setInput(self, inputs):
+        self.inputs = inputs
+        self.inputs = np.insert(self.inputs, 0, -1)
 
     def setTarget(self, target):
         self.target = target

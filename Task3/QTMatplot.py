@@ -157,11 +157,12 @@ class DemoWidget(QtWidgets.QWidget):
         n = Neuron(lr, actFunc, betaValue)
 
         
-
+        n.initWeight(inputData[0])
         for i in range(nbEpoch):
             n.lr = lr + (maxLr-lr)*(1+(math.cos((i*math.pi)/nbEpoch)))
-            n.setInput(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1])
+            n.setInput(inputData[i%(inputData.shape[0])])
             n.setTarget(targetData[i%(inputData.shape[0])])
+
             #print(inputData[i%(inputData.shape[0])][0], inputData[i%(inputData.shape[0])][1], targetData[i%(inputData.shape[0])], n.prediction())
             n.train()
         
@@ -177,7 +178,8 @@ class DemoWidget(QtWidgets.QWidget):
         X, Y = np.meshgrid(x,y)
         for i in x:
             for j in y:
-                neuron.setInput(j,i)
+
+                neuron.setInput((j,i))
                 Z = np.append(Z, neuron.prediction())
                 #print(i,j,neuron.prediction())
         Z = Z.reshape((len(x), len(y)))
