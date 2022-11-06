@@ -2,17 +2,17 @@ import math
 import numpy as np
 class Neuron:
     def __init__(self, lr, actFunc, betaValue):
-        self.weight = np.zeros(3)
+        self.weight = np.zeros(0)
         self.lr = lr
         self.actFunc = actFunc
-        self.inputs = [-1,0, 0] #default value
+        self.inputs = [] #default value
         self.target = 0 #default value
         self.sum = 0
         self.betaValue = betaValue
+        self.error = 0
 
-    def initWeight(self, inputs):
-        self.weight = np.zeros(inputs.shape[0] + 1)
-        print(self.weight)
+    def initNeuronWeight(self, inputs):
+        self.weight = np.random.rand(inputs.shape[0] + 1)
 
     def setInput(self, inputs):
         self.inputs = inputs
@@ -93,6 +93,14 @@ class Neuron:
 
         for i in range(len(self.weight)):
             self.weight[i] += error * self.inputs[i] * self.lr * self.derivativeActFunc(self.sum)
+
+    def computeError(self, isOutputNeuron):
+        if isOutputNeuron:
+            prediction = self.prediction()
+            self.error = self.derivativeActFunc(self.sum)*(self.target - prediction)
+
+
+
 
 
         
