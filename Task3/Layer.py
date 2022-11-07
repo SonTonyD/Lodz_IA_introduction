@@ -10,9 +10,10 @@ class Layer:
         self.neurons = []
         self.output = np.array([])
         self.weights = np.array([])
+        self.errors = np.array([])
 
         for i in range(nbNeuron):
-            self.neurons.append( Neuron(self.lr, self.actFunc, 0) )
+            self.neurons.append( Neuron(self.lr, self.actFunc, 1) )
 
     def initWeight(self, input):
         for neuron in self.neurons:
@@ -26,8 +27,44 @@ class Layer:
             neuron.setInput(self.input)
     
     def computeOutputs(self):
+        self.output = np.array([])
         for neuron in self.neurons:
             self.output = np.append(self.output, neuron.prediction())
+
+    def computeOutputsError(self):
+        self.errors = np.array([])
+        for neuron in self.neurons:
+            error = neuron.computeErrorOutput()
+            self.errors = np.append(self.errors, error)
+
+    def computeError(self, previousLayer):
+        previousErrors = previousLayer.errors
+        self.errors = np.array([])
+        neuronId = 0
+        for neuron in self.neurons:
+            previousWeights = self.getPreviousWeight(neuronId, previousLayer)
+            error = neuron.computeError(previousErrors, previousWeights)
+            self.errors = np.append(self.errors, error)
+            neuronId += 1
+
+    def getPreviousWeight(self, neuronId, previousLayer):
+        previousWeights = np.array([])
+        for neuron in previousLayer.neurons:
+            previousWeights = np.append(previousWeights, neuron.weight[neuronId+1])
+        return previousWeights
+
+
+    def setTarget(self, target):
+        for i in range(len(self.neurons)):
+            self.neurons[i].setTarget(target[i])
+
+    def updateWeights(self):
+        for neuron in self.neurons:
+            neuron.updateWeights()
+
+    def printWeights(self):
+        for neuron in self.neurons:
+            print(neuron.weight)
 
 
 
