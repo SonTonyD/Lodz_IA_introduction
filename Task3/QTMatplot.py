@@ -58,6 +58,9 @@ class DemoWidget(QtWidgets.QWidget):
 
         self.lineEdit_betaValue.setText("1.0")
 
+        self.lineEdit_nbNeuronsInput.setText("2")
+        self.lineEdit_nbNeuronsHidden.setText("3")
+
 
     def click(self):
         plt.close()
@@ -82,9 +85,12 @@ class DemoWidget(QtWidgets.QWidget):
         actFunc = self.comboBoxActFunc.currentText()
         betaValue = float(self.lineEdit_betaValue.text())
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr)
+        nbInputNeuron = int(self.lineEdit_nbNeuronsInput.text())
+        nbHiddenNeuron = int(self.lineEdit_nbNeuronsHidden.text())
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr):
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron)
+
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -98,11 +104,11 @@ class DemoWidget(QtWidgets.QWidget):
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
 
         #Feed the neuron
-        neuron = Neuron(lr, actFunc, betaValue)
-        neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc, betaValue, maxLr)
+        #neuron = Neuron(lr, actFunc, betaValue)
+        #neuron.weight = self.useNeuron(inputData, target, nbOfEpoch, lr, actFunc, betaValue, maxLr)
 
         #Draw Contour
-        self.drawContour(neuron, meanMin, meanMax)
+        #self.drawContour(neuron, meanMin, meanMax)
 
         plt.xlim(meanMin, meanMax)
         plt.ylim(meanMin, meanMax)
@@ -157,7 +163,7 @@ class DemoWidget(QtWidgets.QWidget):
         n = Neuron(lr, actFunc, betaValue)
 
         
-        n.initWeight(inputData[0])
+        n.initNeuronWeight(inputData[0])
         for i in range(nbEpoch):
             n.lr = lr + (maxLr-lr)*(1+(math.cos((i*math.pi)/nbEpoch)))
             n.setInput(inputData[i%(inputData.shape[0])])

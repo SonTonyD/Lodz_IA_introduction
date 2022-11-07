@@ -66,7 +66,7 @@ nn.setInput(input[0])
 nn.setTarget(target[0])
 nn.initAllWeights()
 nn.printWeights()
-for i in range(4000):
+for i in range(2000):
     index = random.randint(0,3)
     nn.setInput(input[index])
     nn.setTarget(target[index])
@@ -83,11 +83,6 @@ for i in range(4):
     print(nn.outputLayer.output)
 
 
-'''
-nn.outputLayer.computeOutputsError()
-nn.hiddenLayer.computeError(nn.outputLayer)
-nn.inputLayer.computeError(nn.hiddenLayer)
-'''
 
 
 
