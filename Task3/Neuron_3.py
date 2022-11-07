@@ -99,18 +99,18 @@ class Neuron:
         self.error = self.derivativeActFunc(self.sum)*(self.target - prediction)
         return self.error
 
+
     def computeError(self, previousErrors, previousWeights):
         prediction = self.prediction() #keep this, to compute self.sum !!
 
         weightedErrors = 0
         for i in range(len(previousErrors)):
-            weightedErrors += previousWeights[i]*previousErrors[i] #replace self.weight
+            weightedErrors += previousWeights[i]*previousErrors[i] 
 
         self.error = self.derivativeActFunc(self.sum)*weightedErrors
         return self.error
     
     def updateWeights(self):
-        #self.weight[0] += self.lr * self.error
         for i in range(1,len(self.weight)):
             self.weight[i] += self.lr * self.inputs[i] * self.error
 

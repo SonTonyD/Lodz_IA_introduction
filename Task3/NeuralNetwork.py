@@ -6,9 +6,9 @@ class NeuralNetwork:
     def __init__(self, nbInputNeuron, nbHiddenNeuron, nbOutputNeuron):
         self.input = 0
         self.target = 0
-        self.inputLayer = Layer('heaviside', nbInputNeuron, 0.3)
-        self.hiddenLayer = Layer('heaviside', nbHiddenNeuron, 0.3)
-        self.outputLayer = Layer('heaviside', nbOutputNeuron, 0.3)
+        self.inputLayer = Layer('sin', nbInputNeuron, 0.1)
+        self.hiddenLayer = Layer('sin', nbHiddenNeuron, 0.1)
+        self.outputLayer = Layer('logistic', nbOutputNeuron, 0.1)
 
         self.Layers = [self.inputLayer, self.hiddenLayer, self.outputLayer]
 
@@ -56,7 +56,7 @@ class NeuralNetwork:
 
 
 input = np.array([[0,0],[0,1],[1,0],[1,1]])
-target = np.array([[0,0],[0,1],[1,0],[1,1]])
+target = np.array([[1,0],[0,1],[0,1],[1,0]])
 
 
 
@@ -66,7 +66,7 @@ nn.setInput(input[0])
 nn.setTarget(target[0])
 nn.initAllWeights()
 nn.printWeights()
-for i in range(5000):
+for i in range(4000):
     index = random.randint(0,3)
     nn.setInput(input[index])
     nn.setTarget(target[index])
