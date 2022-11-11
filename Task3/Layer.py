@@ -2,7 +2,7 @@ import math
 import numpy as np
 from Neuron_3 import Neuron
 class Layer:
-    def __init__(self, actFunc, nbNeuron, lr):
+    def __init__(self, actFunc, nbNeuron, lr, logisticParam):
         self.input = np.array([])
         self.actFunc = actFunc
         self.nbNeuron = nbNeuron
@@ -11,9 +11,10 @@ class Layer:
         self.output = np.array([])
         self.weights = np.array([])
         self.errors = np.array([])
+        self.logisticParam = logisticParam
 
         for i in range(nbNeuron):
-            self.neurons.append( Neuron(self.lr, self.actFunc, 1) )
+            self.neurons.append( Neuron(self.lr, self.actFunc, logisticParam) )
 
     def initWeight(self, input):
         for neuron in self.neurons:

@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 from PyQt5.QtCore import *
 
+from NeuralNetwork import NeuralNetwork
+import random
+
 
 class DemoWidget(QtWidgets.QWidget):
     def __init__(self):
@@ -48,18 +51,26 @@ class DemoWidget(QtWidgets.QWidget):
         self.lineEdit_meanMax.setText("10")
         
         self.lineEdit_varMin.setText("0.5")
-        self.lineEdit_varMax.setText("0.9")
+        self.lineEdit_varMax.setText("0.6")
         
-        self.lineEdit_samplePerMode.setText("300")
-        self.lineEdit_modePerClass.setText("1")
+        self.lineEdit_samplePerMode.setText("350")
+        self.lineEdit_modePerClass.setText("3")
 
         self.lineEdit_lr.setText("0.01")
-        self.lineEdit_nbOfEpoch.setText("200")
+        self.lineEdit_nbOfEpoch.setText("2000")
 
         self.lineEdit_betaValue.setText("1.0")
 
         self.lineEdit_nbNeuronsInput.setText("2")
         self.lineEdit_nbNeuronsHidden.setText("3")
+
+        self.lineEdit_lrInput.setText("0.01")
+        self.lineEdit_lrHidden.setText("0.01")
+        self.lineEdit_lrOutput.setText("0.01")
+
+        self.lineEdit_betaValue_Input.setText("1")
+        self.lineEdit_betaValue_Hidden.setText("1")
+        self.lineEdit_betaValue_Output.setText("5")
 
 
     def click(self):
@@ -88,9 +99,25 @@ class DemoWidget(QtWidgets.QWidget):
         nbInputNeuron = int(self.lineEdit_nbNeuronsInput.text())
         nbHiddenNeuron = int(self.lineEdit_nbNeuronsHidden.text())
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron)
+        lrInput = float(self.lineEdit_lrInput.text())
+        lrHidden = float(self.lineEdit_lrHidden.text())
+        lrOutput = float(self.lineEdit_lrOutput.text())
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron):
+        actFuncInput = self.comboBoxActFunc_Input.currentText()
+        actFuncHidden = self.comboBoxActFunc_Hidden.currentText()
+        actFuncOutput = self.comboBoxActFunc_Output.currentText()
+
+        betaValueInput = float(self.lineEdit_betaValue_Input.text())
+        betaValueHidden = float(self.lineEdit_betaValue_Hidden.text())
+        betaValueOutput = float(self.lineEdit_betaValue_Output.text())
+
+        
+        list_hyperparams = [lrInput, lrHidden, lrOutput, actFuncInput, actFuncHidden, actFuncOutput, betaValueInput, betaValueHidden, betaValueOutput]
+
+
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron, list_hyperparams)
+
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron, list_hyperparams):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -101,7 +128,24 @@ class DemoWidget(QtWidgets.QWidget):
         (arrayClass02X, arrayClass02Y) = self.generate_points(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, "red")
 
         #Create inputData and target as numpy arrays
+        #** input [x,y]
+        #** target [0,1] or [1,0]
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
+
+        #use Neural network
+        nn = NeuralNetwork(2, 3, 2, list_hyperparams)
+
+        nn.setInput(inputData[0])
+        nn.setTarget(target[0])
+        nn.initAllWeights()
+        nn.printWeights()
+        for i in range(2000):
+            index = random.randint(0,inputData.shape[0]-1)
+            nn.setInput(inputData[index])
+            nn.setTarget(target[index])
+            nn.feedforward()
+            nn.backpropagation()
+            nn.updateWeight()
 
         #Feed the neuron
         #neuron = Neuron(lr, actFunc, betaValue)
@@ -109,6 +153,7 @@ class DemoWidget(QtWidgets.QWidget):
 
         #Draw Contour
         #self.drawContour(neuron, meanMin, meanMax)
+        self.drawContour(nn, meanMin, meanMax)
 
         plt.xlim(meanMin, meanMax)
         plt.ylim(meanMin, meanMax)
@@ -146,10 +191,23 @@ class DemoWidget(QtWidgets.QWidget):
         #print(allInput)
 
         #build target vector from AllInput vector
-        target = np.array([])
-        for i in range(allInput.shape[0]):
-            target = np.append(target, allInput[i][2])
+        #target = np.array([])
+        #for i in range(allInput.shape[0]):
+        #    target = np.append(target, allInput[i][2])
         #print(target)
+
+        #build target vector for neural network from AllInput vector
+        if allInput[0][2] == 0:
+            target = np.array([1,0])
+        else:
+            target = np.array([0,1])
+
+        for i in range(1,allInput.shape[0]):
+            if allInput[i][2] == 0:
+                target = np.vstack([target, [1,0]])
+            else:
+                target = np.vstack([target, [0,1]])
+            
         
         #re-build allInput without target
         inputData = np.array([allInput[0][0],allInput[0][1]])
@@ -176,7 +234,7 @@ class DemoWidget(QtWidgets.QWidget):
         return n.weight
 
 
-    def drawContour(self, neuron, meanMin, meanMax):
+    def drawContour(self, neuralNetwork , meanMin, meanMax):
         x = np.arange(meanMin, meanMax, 0.1)
         y = np.arange(meanMin, meanMax, 0.1)
 
@@ -185,8 +243,17 @@ class DemoWidget(QtWidgets.QWidget):
         for i in x:
             for j in y:
 
-                neuron.setInput((j,i))
-                Z = np.append(Z, neuron.prediction())
+                neuralNetwork.setInput((j,i))
+                neuralNetwork.feedforward()
+                #Result neuralNetwork.outputLayer.output
+                classOutput0 = neuralNetwork.outputLayer.output[0]
+                classOutput1 = neuralNetwork.outputLayer.output[1]
+
+                zValue = -classOutput0 + classOutput1
+                    
+                
+
+                Z = np.append(Z, zValue) #change this
                 #print(i,j,neuron.prediction())
         Z = Z.reshape((len(x), len(y)))
 
