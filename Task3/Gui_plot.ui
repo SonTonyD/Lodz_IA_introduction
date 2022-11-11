@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>831</height>
+    <width>454</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -160,8 +160,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>790</y>
+     <x>160</x>
+     <y>620</y>
      <width>111</width>
      <height>28</height>
     </rect>
@@ -247,8 +247,8 @@
   <widget class="QLineEdit" name="lineEdit_nbOfEpoch">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>570</y>
+     <x>30</x>
+     <y>550</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -257,186 +257,14 @@
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>550</y>
+     <x>30</x>
+     <y>530</y>
      <width>71</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Nb of Epoch</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_lr">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>570</y>
-     <width>91</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>550</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Learning Rate</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="comboBoxActFunc">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>710</y>
-     <width>111</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="editable">
-    <bool>false</bool>
-   </property>
-   <item>
-    <property name="text">
-     <string>heaviside</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>logistic</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>sin</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>tanh</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>sign</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>relu</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>leaky relu</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>690</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Activation Function</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_betaValue">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>710</y>
-     <width>71</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_betaValue">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>690</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bêta Value</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_variableLr">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>610</y>
-     <width>161</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Variable Learning Rate</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_maxLr">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>650</y>
-     <width>91</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_maxLr">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>630</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Max lr</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_minLr">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>630</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Min lr</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_minLr">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>650</y>
-     <width>91</width>
-     <height>22</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit_nbNeuronsInput">

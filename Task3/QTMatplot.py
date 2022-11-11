@@ -17,33 +17,12 @@ class DemoWidget(QtWidgets.QWidget):
     def __init__(self):
         super(DemoWidget, self).__init__()
         uic.loadUi('gui_plot.ui', self)
-        self.label_betaValue.setHidden(True)
-        self.lineEdit_betaValue.setHidden(True)
         
         self.pushButton.clicked.connect(self.click)
         self.defaultValueButton.clicked.connect(self.setDefaultValue)
-        self.comboBoxActFunc.currentIndexChanged.connect(self.selectionChange)
-        self.checkBox_variableLr.stateChanged.connect(self.handleCheckBox)
 
         self.show()
 
-    def handleCheckBox(self):
-        if self.checkBox_variableLr.isChecked() == True:
-            self.lineEdit_minLr.setEnabled(True)
-            self.lineEdit_maxLr.setEnabled(True)
-            self.lineEdit_lr.setEnabled(False)
-        else:
-            self.lineEdit_minLr.setEnabled(False)
-            self.lineEdit_maxLr.setEnabled(False)
-            self.lineEdit_lr.setEnabled(True)
-
-    def selectionChange(self):
-        if self.comboBoxActFunc.currentText() == "logistic":
-            self.label_betaValue.setHidden(False)
-            self.lineEdit_betaValue.setHidden(False)
-        else:
-            self.label_betaValue.setHidden(True)
-            self.lineEdit_betaValue.setHidden(True)
 
     def setDefaultValue(self):
         plt.close()
@@ -56,10 +35,8 @@ class DemoWidget(QtWidgets.QWidget):
         self.lineEdit_samplePerMode.setText("350")
         self.lineEdit_modePerClass.setText("3")
 
-        self.lineEdit_lr.setText("0.01")
         self.lineEdit_nbOfEpoch.setText("2000")
 
-        self.lineEdit_betaValue.setText("1.0")
 
         self.lineEdit_nbNeuronsInput.setText("2")
         self.lineEdit_nbNeuronsHidden.setText("3")
@@ -84,17 +61,9 @@ class DemoWidget(QtWidgets.QWidget):
         samplePerMode = int(self.lineEdit_samplePerMode.text())
         modePerClass = int(self.lineEdit_modePerClass.text())
 
-        if self.checkBox_variableLr.isChecked() == True:
-            lr = float(self.lineEdit_minLr.text())
-            maxLr = float(self.lineEdit_maxLr.text())
-        else:
-            lr = float(self.lineEdit_lr.text())
-            maxLr = float(self.lineEdit_lr.text())
 
 
         nbOfEpoch = int(self.lineEdit_nbOfEpoch.text())
-        actFunc = self.comboBoxActFunc.currentText()
-        betaValue = float(self.lineEdit_betaValue.text())
 
         nbInputNeuron = int(self.lineEdit_nbNeuronsInput.text())
         nbHiddenNeuron = int(self.lineEdit_nbNeuronsHidden.text())
@@ -115,9 +84,9 @@ class DemoWidget(QtWidgets.QWidget):
         list_hyperparams = [lrInput, lrHidden, lrOutput, actFuncInput, actFuncHidden, actFuncOutput, betaValueInput, betaValueHidden, betaValueOutput]
 
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron, list_hyperparams)
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams)
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, lr, nbOfEpoch, actFunc, betaValue, maxLr, nbInputNeuron, nbHiddenNeuron, list_hyperparams):
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -133,13 +102,14 @@ class DemoWidget(QtWidgets.QWidget):
         inputData, target = self.formatData(arrayClass01X, arrayClass01Y, arrayClass02X, arrayClass02Y)
 
         #use Neural network
-        nn = NeuralNetwork(2, 3, 2, list_hyperparams)
+        NB_OUTPUT_NEURON = 2
+        nn = NeuralNetwork(nbInputNeuron, nbHiddenNeuron, NB_OUTPUT_NEURON, list_hyperparams)
 
         nn.setInput(inputData[0])
         nn.setTarget(target[0])
         nn.initAllWeights()
         nn.printWeights()
-        for i in range(2000):
+        for i in range(nbOfEpoch):
             index = random.randint(0,inputData.shape[0]-1)
             nn.setInput(inputData[index])
             nn.setTarget(target[index])
