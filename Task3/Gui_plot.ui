@@ -605,6 +605,29 @@
     <string>Nb of Layers</string>
    </property>
   </widget>
+  <widget class="QLineEdit" name="lineEdit_batchSize">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>550</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>530</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Batch Size</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

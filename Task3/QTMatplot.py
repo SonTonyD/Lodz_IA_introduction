@@ -49,6 +49,7 @@ class DemoWidget(QtWidgets.QWidget):
         self.lineEdit_betaValue_Output.setText("5")
 
         self.lineEdit_nbHiddenLayer.setText("1")
+        self.lineEdit_batchSize.setText("1")
 
 
     def click(self):
@@ -82,14 +83,15 @@ class DemoWidget(QtWidgets.QWidget):
         betaValueOutput = float(self.lineEdit_betaValue_Output.text())
 
         nbHiddenLayer = int(self.lineEdit_nbHiddenLayer.text())
+        batchSize = int(self.lineEdit_batchSize.text())
 
         
         list_hyperparams = [lrInput, lrHidden, lrOutput, actFuncInput, actFuncHidden, actFuncOutput, betaValueInput, betaValueHidden, betaValueOutput]
 
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer)
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer, batchSize)
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer):
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer, batchSize):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -117,7 +119,8 @@ class DemoWidget(QtWidgets.QWidget):
             nn.setTarget(target[index])
             nn.feedforward()
             nn.backpropagation()
-            nn.updateWeight()
+            if i%batchSize == 0:
+                nn.updateWeight()
 
         #Feed the neuron
         #neuron = Neuron(lr, actFunc, betaValue)
