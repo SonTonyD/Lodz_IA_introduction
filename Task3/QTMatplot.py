@@ -6,7 +6,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from Neuron_3 import Neuron
 import matplotlib.pyplot as plt
-from matplotlib import colors
 from PyQt5.QtCore import *
 
 from NeuralNetwork import NeuralNetwork
@@ -49,6 +48,8 @@ class DemoWidget(QtWidgets.QWidget):
         self.lineEdit_betaValue_Hidden.setText("1")
         self.lineEdit_betaValue_Output.setText("5")
 
+        self.lineEdit_nbHiddenLayer.setText("1")
+
 
     def click(self):
         plt.close()
@@ -80,13 +81,15 @@ class DemoWidget(QtWidgets.QWidget):
         betaValueHidden = float(self.lineEdit_betaValue_Hidden.text())
         betaValueOutput = float(self.lineEdit_betaValue_Output.text())
 
+        nbHiddenLayer = int(self.lineEdit_nbHiddenLayer.text())
+
         
         list_hyperparams = [lrInput, lrHidden, lrOutput, actFuncInput, actFuncHidden, actFuncOutput, betaValueInput, betaValueHidden, betaValueOutput]
 
 
-        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams)
+        self.plotComponent(meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer)
 
-    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams):
+    def plotComponent(self, meanMin, meanMax, varMin, varMax, samplePerMode, modePerClass, nbOfEpoch, nbInputNeuron, nbHiddenNeuron, list_hyperparams, nbHiddenLayer):
         arrayClass01X = np.array([])
         arrayClass01Y = np.array([])
 
@@ -103,12 +106,11 @@ class DemoWidget(QtWidgets.QWidget):
 
         #use Neural network
         NB_OUTPUT_NEURON = 2
-        nn = NeuralNetwork(nbInputNeuron, nbHiddenNeuron, NB_OUTPUT_NEURON, list_hyperparams)
+        nn = NeuralNetwork(nbInputNeuron, nbHiddenNeuron, NB_OUTPUT_NEURON, list_hyperparams, nbHiddenLayer)
 
         nn.setInput(inputData[0])
         nn.setTarget(target[0])
         nn.initAllWeights()
-        nn.printWeights()
         for i in range(nbOfEpoch):
             index = random.randint(0,inputData.shape[0]-1)
             nn.setInput(inputData[index])
@@ -221,8 +223,6 @@ class DemoWidget(QtWidgets.QWidget):
 
                 zValue = -classOutput0 + classOutput1
                     
-                
-
                 Z = np.append(Z, zValue) #change this
                 #print(i,j,neuron.prediction())
         Z = Z.reshape((len(x), len(y)))

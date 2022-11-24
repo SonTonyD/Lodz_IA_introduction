@@ -82,8 +82,9 @@ class Neuron:
     #Return the output y
     def prediction(self):
         self.sum = 0
-        for i in range(len(self.weight)):
+        for i in range(len(self.inputs)):
             self.sum += self.inputs[i]*self.weight[i]
+
         
         return self.activationFunc(self.sum)
 

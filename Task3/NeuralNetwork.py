@@ -3,14 +3,17 @@ import random
 import numpy as np
 from Layer import Layer
 class NeuralNetwork:
-    def __init__(self, nbInputNeuron, nbHiddenNeuron, nbOutputNeuron, list_hyperparams):
+    def __init__(self, nbInputNeuron, nbHiddenNeuron, nbOutputNeuron, list_hyperparams, nbHiddenLayer):
         self.input = 0
         self.target = 0
         self.inputLayer = Layer(list_hyperparams[3], nbInputNeuron, list_hyperparams[0], list_hyperparams[6])
         self.hiddenLayer = Layer(list_hyperparams[4], nbHiddenNeuron, list_hyperparams[1], list_hyperparams[7])
         self.outputLayer = Layer(list_hyperparams[5], nbOutputNeuron, list_hyperparams[2], list_hyperparams[8])
 
-        self.Layers = [self.inputLayer, self.hiddenLayer, self.outputLayer]
+        self.Layers = [self.inputLayer]
+        for i in range(nbHiddenLayer):
+            self.Layers.append(self.hiddenLayer)
+        self.Layers.append(self.outputLayer)
 
     def setInput(self, input):
         self.input = input
@@ -18,6 +21,7 @@ class NeuralNetwork:
     def initAllWeights(self):          
         currentInput = self.input
         for layer in self.Layers:
+            
             layer.initWeight(currentInput)
             layer.setInput(currentInput)
             layer.feedNeurons()
